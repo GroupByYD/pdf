@@ -1,0 +1,355 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YatraDham — Quotation Builder</title>
+<link rel="icon" type="image/png" href="ICON.png">
+<link rel="shortcut icon" type="image/png" href="ICON.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ============ APP HEADER ============ -->
+<header class="app-header">
+  <div class="app-header__inner">
+    <div class="app-header__brand">
+      <img src="https://cdn.yatradham.org/skin/frontend/default/ydhome/yd_newtheme/images/logo.png" alt="YatraDham" class="app-header__logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-flex';">
+      <span class="app-header__logo-fallback" style="display:none;">YatraDham</span>
+      <div class="app-header__divider" aria-hidden="true"></div>
+      <div class="app-header__title">
+        <h1>Quotation Builder</h1>
+        <p>Pilgrimage &bull; Stay &bull; Experience</p>
+      </div>
+    </div>
+    <div class="app-header__actions">
+      
+      <button type="button" class="btn btn--primary" id="generatePdfBtnTop">
+        <span>Generate PDF</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- ============ MAIN LAYOUT ============ -->
+<main class="layout">
+
+  <!-- ===== LEFT: BUILDER ===== -->
+  <section class="builder" aria-label="Quotation builder">
+
+    <div id="errorBanner" class="error-banner" hidden></div>
+
+    <!-- STEP 1 — PROPERTY -->
+    <div class="card step-card">
+      <div class="step-card__head">
+        <span class="step-card__icon">&#127961;&#65039;</span>
+        <div>
+          <span class="step-card__eyebrow">Step 1</span>
+          <h2>Property</h2>
+          <p class="step-card__desc">Tell the customer where they'll be staying.</p>
+        </div>
+      </div>
+      <div class="field-grid">
+        <div class="field field--full">
+          <label for="propertyName">Dharamshala / Property name <span class="req">*</span></label>
+          <input type="text" id="propertyName" placeholder="e.g. Swaminarayan Bhaktidham" autocomplete="off">
+        </div>
+        <div class="field field--full">
+          <label for="propertyUrl">Property URL</label>
+          <input type="url" id="propertyUrl" placeholder="https://www.yatradham.org/...">
+        </div>
+        <div class="field">
+          <label for="videoUrl">Video URL <span class="optional">(optional)</span></label>
+          <input type="url" id="videoUrl" placeholder="YouTube, Vimeo or direct link">
+        </div>
+        <div class="field">
+          <label for="reviewUrl">Customer review URL <span class="optional">(optional)</span></label>
+          <input type="url" id="reviewUrl" placeholder="Link to reviews">
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 2 — STAY DETAILS -->
+    <div class="card step-card">
+      <div class="step-card__head">
+        <span class="step-card__icon">&#128197;</span>
+        <div>
+          <span class="step-card__eyebrow">Step 2</span>
+          <h2>Stay details</h2>
+          <p class="step-card__desc">When are they arriving, and how many pilgrims?</p>
+        </div>
+      </div>
+      <div class="field-grid">
+        <div class="field">
+          <label for="checkinDate">Check-in date <span class="req">*</span></label>
+          <input type="date" id="checkinDate">
+        </div>
+        <div class="field">
+          <label for="checkinHour">Check-in time <span class="optional">(optional)</span></label>
+          <div class="time-select-row">
+            <select id="checkinHour">
+              <option value="0">0</option>
+              <option value="1">1</option>
+              <option value="2" selected>2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+              <option value="7">7</option>
+              <option value="8">8</option>
+              <option value="9">9</option>
+              <option value="10">10</option>
+              <option value="11">11</option>
+              <option value="12">12</option>
+            </select>
+            <select id="checkinPeriod">
+              <option value="AM">AM</option>
+              <option value="PM" selected>PM</option>
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <label for="checkoutDate">Check-out date <span class="req">*</span></label>
+          <input type="date" id="checkoutDate">
+        </div>
+        <div class="field">
+          <label for="checkoutHour">Check-out time <span class="optional">(optional)</span></label>
+          <div class="time-select-row">
+            <select id="checkoutHour">
+              <option value="0">0</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+              <option value="7">7</option>
+              <option value="8">8</option>
+              <option value="9">9</option>
+              <option value="10">10</option>
+              <option value="11" selected>11</option>
+              <option value="12">12</option>
+            </select>
+            <select id="checkoutPeriod">
+              <option value="AM" selected>AM</option>
+              <option value="PM">PM</option>
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <label for="guestCount">Number of guests <span class="req">*</span></label>
+          <input type="number" id="guestCount" min="1" step="1" placeholder="e.g. 4">
+        </div>
+      </div>
+      <div class="stay-summary" id="staySummary" aria-live="polite"></div>
+    </div>
+
+    <!-- STEP 3 — ROOMS -->
+    <div class="card step-card">
+      <div class="step-card__head">
+        <span class="step-card__icon">&#128716;</span>
+        <div>
+          <span class="step-card__eyebrow">Step 3</span>
+          <h2>Rooms</h2>
+          <p class="step-card__desc">Add every room type included in this quotation.</p>
+        </div>
+      </div>
+      <div id="roomsList" class="rooms-list"></div>
+      <button type="button" class="btn btn--outline btn--add" id="addRoomBtn">+ Add room type</button>
+    </div>
+
+    <!-- STEP 4 — CHARGES -->
+    <div class="card step-card">
+      <div class="step-card__head">
+        <span class="step-card__icon">&#8377;</span>
+        <div>
+          <span class="step-card__eyebrow">Step 4</span>
+          <h2>Charges</h2>
+          <p class="step-card__desc">Government tax and the platform convenience charge.</p>
+        </div>
+      </div>
+      <div class="field-grid">
+        <div class="field">
+          <label for="taxPercent">Government tax (%)</label>
+          <input type="number" id="taxPercent" min="0" step="0.01" value="5">
+        </div>
+        <div class="field">
+          <label for="platformPercent">Platform charge (%)</label>
+          <input type="number" id="platformPercent" min="0" step="0.01" value="17.34">
+          <p class="field__hint">Applied on room total + government tax</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 5 — IMAGES -->
+    <div class="card step-card">
+      <div class="step-card__head">
+        <span class="step-card__icon">&#127747;&#65039;</span>
+        <div>
+          <span class="step-card__eyebrow">Step 5</span>
+          <h2>Property images</h2>
+          <p class="step-card__desc">Optional — shown on a dedicated highlights page.</p>
+        </div>
+      </div>
+      <div id="imagesList" class="images-list"></div>
+      <button type="button" class="btn btn--outline btn--add" id="addImageBtn">+ Add image</button>
+      <p class="field__hint" style="margin-top:10px;">Use direct, publicly accessible image links. If a host blocks cross-site access, that image shows as "Image unavailable" in the PDF instead of breaking the file.</p>
+    </div>
+
+    <!-- STEP 6 — TERMS -->
+    <div class="card step-card">
+      <div class="step-card__head">
+        <span class="step-card__icon">&#128220;</span>
+        <div>
+          <span class="step-card__eyebrow">Step 6</span>
+          <h2>Terms &amp; conditions</h2>
+          <p class="step-card__desc">Standard YatraDham terms are included automatically.</p>
+        </div>
+      </div>
+      <div class="field">
+        <label for="customTermPoint">Additional point <span class="optional">(optional)</span></label>
+        <textarea id="customTermPoint" rows="3" placeholder="Add a property-specific condition, if needed"></textarea>
+      </div>
+      <p class="verify-note">&#9888;&#65039; Please verify current company-approved Terms &amp; Conditions before customer use.</p>
+    </div>
+
+    <!-- STEP 7 — GENERATE -->
+    <div class="card step-card step-card--final">
+      <div class="step-card__head">
+        <span class="step-card__icon">&#10003;</span>
+        <div>
+          <span class="step-card__eyebrow">Step 7</span>
+          <h2>Preview &amp; generate</h2>
+          <p class="step-card__desc">Review the proposal on the right, then generate the PDF.</p>
+        </div>
+      </div>
+      <button type="button" class="btn btn--primary btn--large" id="generatePdfBtnBottom">Generate PDF</button>
+      <p class="generate-status" id="generateStatus" aria-live="polite"></p>
+    </div>
+
+  </section>
+
+  <!-- ===== RIGHT: LIVE PREVIEW ===== -->
+  <aside class="preview-pane" aria-label="Live quotation preview">
+    <div class="preview-pane__inner">
+      <div class="preview-pane__label">
+        <span class="preview-pane__dot"></span> Live preview
+      </div>
+
+      <div class="pdf-sheet" id="pdfSheet">
+        <div class="pdf-sheet__header">
+          <img src="https://cdn.yatradham.org/skin/frontend/default/ydhome/yd_newtheme/images/logo.png" alt="YatraDham" class="pdf-sheet__logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-block';">
+          <span class="pdf-sheet__logo-fallback" style="display:none;">YatraDham</span>
+          <span class="pdf-sheet__tagline">Pilgrimage &bull; Stay &bull; Experience</span>
+        </div>
+
+        <div class="pdf-sheet__body">
+          <h2 class="pdf-sheet__property" id="pvPropertyName">Property name</h2>
+          <div class="pdf-sheet__links" id="pvLinks"></div>
+
+          <div class="pdf-sheet__stay" id="pvStay"></div>
+
+          <table class="pdf-table" id="pvRoomTable">
+            <thead>
+              <tr>
+                <th>Room type</th>
+                <th>Guests / room</th>
+                <th>Room price</th>
+                <th>No. of rooms</th>
+                <th>Nights</th>
+                <th class="ta-r">Total</th>
+              </tr>
+            </thead>
+            <tbody id="pvRoomTableBody"></tbody>
+          </table>
+
+          <table class="pdf-table pdf-table--summary" id="pvSummaryTable">
+            <tbody id="pvSummaryTableBody"></tbody>
+          </table>
+
+          <div class="pdf-final-total" id="pvFinalTotal"></div>
+
+          <div class="pdf-per-person" id="pvPerPerson"></div>
+
+          <p class="pdf-sheet__note">Images and full Terms &amp; Conditions appear on following pages of the generated PDF.</p>
+        </div>
+
+        <div class="pdf-sheet__footer">
+          <span>YatraDham.org &mdash; Religious Tourism &amp; Pilgrimage Services</span>
+          <span>Page 1</span>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+</main>
+
+<!-- ============ MOBILE STICKY ACTION BAR ============ -->
+<div class="mobile-action-bar">
+  <button type="button" class="btn btn--primary btn--large" id="generatePdfBtnMobile">Generate PDF</button>
+</div>
+
+
+
+<!-- Image thumbnail template -->
+<template id="roomTemplate">
+  <div class="room-card" data-room-id="">
+    <div class="room-card__head">
+      <span class="room-card__badge"></span>
+      <button type="button" class="room-card__remove" aria-label="Remove room">Remove</button>
+    </div>
+    <div class="field-grid">
+      <div class="field field--full">
+        <label>Room type <span class="req">*</span></label>
+        <input type="text" class="room-type" placeholder="e.g. Deluxe AC Room">
+      </div>
+      <div class="field">
+        <label>Room price (per night) <span class="req">*</span></label>
+        <input type="number" class="room-price" min="0" step="1" placeholder="500">
+      </div>
+      <div class="field">
+        <label>Guests / room <span class="req">*</span></label>
+        <input type="number" class="room-guests" min="1" step="1" placeholder="2">
+      </div>
+      <div class="field">
+        <label>No. of rooms <span class="req">*</span></label>
+        <input type="number" class="room-count" min="1" step="1" placeholder="2">
+      </div>
+      <div class="field field--full">
+        <label>Description <span class="optional">(optional)</span></label>
+        <input type="text" class="room-desc" placeholder="Suitable for families and couples">
+      </div>
+    </div>
+    <div class="room-card__calc"></div>
+  </div>
+</template>
+
+<template id="imageTemplate">
+  <div class="image-card" data-image-id="">
+    <div class="image-card__preview">
+      <img class="image-card__thumb" alt="">
+      <span class="image-card__placeholder">No preview yet</span>
+    </div>
+    <div class="image-card__fields">
+      <div class="field">
+        <label>Image URL</label>
+        <input type="url" class="image-url" placeholder="https://...">
+      </div>
+      <div class="field">
+        <label>Description</label>
+        <textarea class="image-desc" rows="2" placeholder="Comfortable family accommodation with a peaceful environment."></textarea>
+      </div>
+    </div>
+    <button type="button" class="image-card__remove" aria-label="Remove image">Remove</button>
+  </div>
+</template>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
