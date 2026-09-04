@@ -1060,11 +1060,12 @@ y = doc.lastAutoTable.finalY + 10;
         margin: { left: marginX, right: marginX, top: TABLE_TOP_MARGIN, bottom: 20 },
         head: [['Metric', 'Value']],
         body: [
-          ['Total Guests', String(totals.guests)],
-          ['Total Nights', String(totals.nights)],
-          ['GRAND TOTAL', formatINRPdf(totals.finalTotal)],
-          ['Approx. Per Person', formatINRPdf(totals.perPerson)]
-        ],
+  ['Total Guests', String(totals.guests)],
+  ['Total Nights', String(totals.nights)],
+  ['GRAND TOTAL', formatINRPdf(totals.finalTotal)],
+  ['Per Day Per Person', formatINRPdf(totals.perPerson / totals.nights)],
+  ['Approx. Per Person', formatINRPdf(totals.perPerson)]
+],
         theme: 'grid',
         tableWidth: contentW * 0.62,
         styles: { font: 'helvetica', fontSize: 9.5, fontStyle: 'bold', textColor: BRAND.textBody, cellPadding: 3.5, lineColor: BRAND.maroon, lineWidth: 0.4 },
